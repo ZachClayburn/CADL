@@ -8,7 +8,7 @@ verify_ssl = true
 [packages]
 matplotlib = "*"
 requests = "*"
-# magenta = "*" This prevents locking, only add it if you need it
+# magenta = "*" This prevents locking, only add it if you need it, and comment out scikit-image
 scipy = "*"
 scikit-image = "*"
 nltk = "*"
