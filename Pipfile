@@ -1,0 +1,28 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+matplotlib = "*"
+requests = "*"
+# magenta = "*" This prevents locking, only add it if you need it
+scipy = "*"
+scikit-image = "*"
+nltk = "*"
+numpy = "*"
+pytest = "*"
+notebook = "*"
+ipython = "*"
+beautifulsoup4 = "*"
+six = "*"
+scikit-learn = "*"
+tensorflow = "*"
+sphinxcontrib-napoleon = "*"
+pretty_midi = "*"
+networkx = ">=2.0"
+
+[requires]
+python_version = "3.7"
