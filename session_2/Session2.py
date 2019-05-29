@@ -163,7 +163,7 @@ def linear(inputs, n_inputs, n_outputs, activation=None, scope=None):
         weight = tf.get_variable(
             name='weight',
             shape=[n_inputs, n_outputs],
-            initializer=tf.random_normal_initializer(stddev=1.)
+            initializer=tf.random_normal_initializer(mean=0.0, stddev=0.1)
         )
         tf.summary.histogram('weight', weight)
         bias = tf.get_variable(
@@ -190,7 +190,7 @@ def image_train(X, Y, Y_predicted, n_runs=500, batch_size=50, learning_rate=0.00
         num_runs += 1
 
     summaries_path = summaries_path / str(num_runs + 1)
-    summaries_path.mkdir()
+    summaries_path.mkdir(parents=True, exist_ok=True)
 
     with tf.name_scope('cost'):
         cost = tf.reduce_mean(
@@ -203,7 +203,7 @@ def image_train(X, Y, Y_predicted, n_runs=500, batch_size=50, learning_rate=0.00
     tf.summary.image('image', tf.reshape(Y_predicted, [1, *img.shape], 'flattened_image'))
     tf.summary.image('expected_image', tf.reshape(Y, [1, *img.shape], 'flattened_expected_image'))
     session_config = tf.ConfigProto(
-        log_device_placement=True
+        # log_device_placement=True
     )
     with tf.Session(config=session_config) as sess:
 
@@ -242,4 +242,4 @@ if __name__ == '__main__':
     graph = tf.get_default_graph()
     op: tf.Operation
     pprint([op.name for op in graph.get_operations()])
-    image_train(*network)
+    image_train(*network, n_runs=10000)
