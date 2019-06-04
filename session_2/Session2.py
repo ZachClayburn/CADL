@@ -41,7 +41,7 @@ img_x = (img_x - np.mean(img_x)) / np.std(img_x)
 
 def distance(p1, p2):
     with tf.name_scope('distance'):
-        return tf.abs(tf.subtract(p1, p2, name='subtraction'), name='absolute_value')
+        return tf.squared_difference(p1, p2, name='squared_difference')
 
 
 def train(X, Y, Y_predicted, n_runs=100, batch_size=200, learning_rate=0.02):
@@ -138,28 +138,29 @@ def polynomial_network(order=1):
     return X, Y, Y_predicted
 
 
-def neural_network(layers=(1, 10,)):
+def neural_network(layers=((20, tf.nn.relu), (3, None))):
     X = tf.placeholder(tf.float32, shape=[None, 2], name='X')
     Y = tf.placeholder(tf.float32, shape=[None, 3], name='Y')
 
     output = X
-
-    for layer_num in range(1, len(layers)):
+    layer_num = 1
+    for n_neurons, activation in layers:
         output = linear(
             output,
-            layers[layer_num-1],
-            layers[layer_num],
-            activation=tf.nn.relu if (layer_num+1) < len(layers) else None,
+            n_outputs=n_neurons,
+            activation=activation,
             scope=f'layer_{layer_num}'
         )
+        layer_num += 1
 
     Y_predicted = output
 
     return X, Y, Y_predicted
 
 
-def linear(inputs, n_inputs, n_outputs, activation=None, scope=None):
+def linear(inputs, n_outputs, activation=None, scope=None):
     with tf.variable_scope(scope or 'linear'):
+        n_inputs = inputs.get_shape().as_list()[1]
         weight = tf.get_variable(
             name='weight',
             shape=[n_inputs, n_outputs],
@@ -201,7 +202,7 @@ def image_train(X, Y, Y_predicted, n_runs=500, batch_size=50, learning_rate=0.00
     feed_dict = {X: img_x, Y: img_y}
 
     tf.summary.image('image', tf.reshape(Y_predicted, [1, *img.shape], 'flattened_image'))
-    tf.summary.image('expected_image', tf.reshape(Y, [1, *img.shape], 'flattened_expected_image'))
+    # tf.summary.image('expected_image', tf.reshape(Y, [1, *img.shape], 'flattened_expected_image'))
     session_config = tf.ConfigProto(
         # log_device_placement=True
     )
@@ -229,15 +230,8 @@ if __name__ == '__main__':
     # plt.imshow(img)
     # plt.show()
 
-    n_inputs = 2
-    n_hidden_layers = 6
-    neurons_per_hidden = 64
-    n_outputs = 3
-
-    layers = [n_inputs]
-    layers.extend([neurons_per_hidden for _ in range(n_hidden_layers)])
-    layers.append(n_outputs)
-
+    layers = [(128, tf.nn.relu) for _ in range(3)]
+    layers.append((3, None))
     network = neural_network(layers)
     graph = tf.get_default_graph()
     op: tf.Operation

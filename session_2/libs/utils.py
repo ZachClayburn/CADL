@@ -13,7 +13,7 @@ import urllib
 import numpy as np
 import zipfile
 import os
-from scipy.misc import imsave
+from imageio import imsave
 
 
 def imcrop_tosquare(img):
@@ -113,7 +113,7 @@ def montage(images, saveto='montage.png'):
                 this_img = images[this_filter]
                 m[1 + i + i * img_h:1 + i + (i + 1) * img_h,
                   1 + j + j * img_w:1 + j + (j + 1) * img_w] = this_img
-    imsave(arr=np.squeeze(m), name=saveto)
+    imsave(im=np.squeeze(m), uri=saveto)
     return m
 
 
@@ -306,6 +306,9 @@ def linear(x, n_output, name=None, activation=None, reuse=None):
         Number of output neurons
     name : None, optional
         Scope to apply
+    activation: None, optional
+        The non-linear activation function for the layer
+    reuse: None
 
     Returns
     -------
