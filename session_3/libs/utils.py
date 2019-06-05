@@ -14,7 +14,7 @@ import numpy as np
 import zipfile
 import os
 from scipy.io import wavfile
-from scipy.misc import imsave
+from skimage.io import imsave
 
 def download(path):
     """Use urllib to download a file.
@@ -265,7 +265,7 @@ def montage(images, saveto='montage.png'):
                 this_img = images[this_filter]
                 m[1 + i + i * img_h:1 + i + (i + 1) * img_h,
                   1 + j + j * img_w:1 + j + (j + 1) * img_w] = this_img
-    imsave(arr=np.squeeze(m), name=saveto)
+    imsave(arr=np.squeeze(m), fname=saveto)
     return m
 
 

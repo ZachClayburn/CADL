@@ -4,9 +4,10 @@ Copyright Parag K. Mital, June 2016.
 """
 import tensorflow.examples.tutorials.mnist.input_data as input_data
 from .dataset_utils import *
+from pathlib import Path
 
 
-def MNIST(one_hot=True, split=[1.0, 0.0, 0.0]):
+def MNIST(one_hot=True, split=[1.0, 0.0, 0.0]) -> Dataset:
     """Returns the MNIST dataset.
 
     Returns
@@ -64,7 +65,8 @@ def CELEB(path='./img_align_celeba/'):
         List of file paths to the dataset.
     """
     if not os.path.exists(path):
-        print('Could not find celeb dataset under {}.'.format(path))
+        path = Path(path)
+        print('Could not find celeb dataset under {}.'.format(path.absolute()))
         print('Try downloading the dataset from the "Aligned and Cropped" ' +
               'link located here (imgs/img_align_celeba.zip [1.34 GB]): ' +
               'http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html')
